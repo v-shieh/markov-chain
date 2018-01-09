@@ -45,19 +45,29 @@ def make_chains(text_string):
     word_lst = text_string.split()
     bigrams = []
 
-    for i in range(len(word_lst) - 1):
-        bigrams.append((word_lst[i], word_lst[i+1]))
+    # for i in range(len(word_lst) - 1):
+    #     bigrams.append((word_lst[i], word_lst[i+1]))
 
-    for i in range(len(bigrams) - 1):
-        # curr_tuple = (word_lst[i], word_lst[i+1])
-        if bigrams[i] in chains:
-            values_lst = chains[bigrams[i]]
-            values_lst.append(bigrams[i + 1][1])
-            chains[bigrams[i]] = values_lst
+    # for i in range(len(bigrams) - 1):
+    #     # curr_tuple = (word_lst[i], word_lst[i+1])
+    #     if bigrams[i] in chains:
+    #         values_lst = chains[bigrams[i]]
+    #         values_lst.append(bigrams[i + 1][1])
+    #         chains[bigrams[i]] = values_lst
+    #     else:
+    #         chains[bigrams[i]] = [bigrams[i + 1][1]]
+
+    for i in range(len(word_lst) - 2):
+        curr_tuple = (word_lst[i], word_lst[i+1])
+        
+        if curr_tuple in chains:
+            values_lst = chains[curr_tuple]
+            values_lst.append(word_lst[i + 2])
+            chains[curr_tuple] = values_lst
         else:
-            chains[bigrams[i]] = [bigrams[i + 1][1]]
+            chains[curr_tuple] = [word_lst[i + 2]]
       
-    print chains
+    return chains
 
 
 def make_text(chains):
@@ -65,7 +75,19 @@ def make_text(chains):
 
     words = []
 
+    chosen_key = choice(chains.keys())
+    chosen_value = choice(chains[chosen_key])
 
+    words.append(chosen_key[0])
+
+    while True:
+        try:
+            chosen_key = (chosen_key[1], chosen_value)
+            chosen_value = choice(chains[chosen_key])
+            words.append(chosen_key[0])
+        except KeyError:
+            words.append("I am.")
+            break
 
     return " ".join(words)
 
