@@ -42,10 +42,22 @@ def make_chains(text_string):
     """
 
     chains = {}
+    word_lst = text_string.split()
+    bigrams = []
 
-    
+    for i in range(len(word_lst) - 1):
+        bigrams.append((word_lst[i], word_lst[i+1]))
 
-    return chains
+    for i in range(len(bigrams) - 1):
+        # curr_tuple = (word_lst[i], word_lst[i+1])
+        if bigrams[i] in chains:
+            values_lst = chains[bigrams[i]]
+            values_lst.append(bigrams[i + 1][1])
+            chains[bigrams[i]] = values_lst
+        else:
+            chains[bigrams[i]] = [bigrams[i + 1][1]]
+      
+    print chains
 
 
 def make_text(chains):
@@ -53,7 +65,7 @@ def make_text(chains):
 
     words = []
 
-    # your code goes here
+
 
     return " ".join(words)
 
@@ -62,7 +74,6 @@ input_path = "green-eggs.txt"
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
-print input_text
 
 # Get a Markov chain
 chains = make_chains(input_text)
