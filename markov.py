@@ -45,42 +45,22 @@ def make_chains(text_string):
     word_lst = text_string.split()
  
 
-    for i in range(len(word_lst) - 1):
+for i in range(len(word_lst) - 1):
         curr_tuple = (word_lst[i], word_lst[i+1])
-        
-        # if curr_tuple in chains:
-        #     if i == len(word_lst) - 2:
-        #         values_lst = chains[curr_tuple]
-        #         values_lst.append(None)
-        #         chains[curr_tuple] = values_lst
-
-        #         chains[(word_lst[-1], None)] = [None]
-        #     else:
-        #         values_lst = chains[curr_tuple]
-        #         values_lst.append(word_lst[i + 2])
-        #         chains[curr_tuple] = values_lst
-        # else:
-        #     if i == len(word_lst) - 2:
-        #         chains[curr_tuple] = [None]
-        #         chains[(word_lst[-1], None)] = [None]
-        #     else:
-        #         chains[curr_tuple] = [word_lst[i + 2]]
+    
         try:
             if curr_tuple in chains:
-                values_lst = chains[curr_tuple]
-                values_lst.append(word_lst[i + 2])
-                chains[curr_tuple] = values_lst
+                chains[curr_tuple].append(word_lst[i + 2])
             else:
                 chains[curr_tuple] = [word_lst[i + 2]]
         except IndexError:
             if curr_tuple in chains:
-                values_lst = chains[curr_tuple]
-                values_lst.append(None)
-                chains[curr_tuple] = values_lst
-                    
+                chains[curr_tuple].append(None)
+                   
                 chains[(word_lst[-1], None)] = [None]
             else:
                 chains[curr_tuple] = [None]
+
                 chains[(word_lst[-1], None)] = [None]
       
     return chains
