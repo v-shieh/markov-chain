@@ -43,29 +43,45 @@ def make_chains(text_string):
 
     chains = {}
     word_lst = text_string.split()
-    bigrams = []
+ 
 
-    # for i in range(len(word_lst) - 1):
-    #     bigrams.append((word_lst[i], word_lst[i+1]))
-
-    # for i in range(len(bigrams) - 1):
-    #     # curr_tuple = (word_lst[i], word_lst[i+1])
-    #     if bigrams[i] in chains:
-    #         values_lst = chains[bigrams[i]]
-    #         values_lst.append(bigrams[i + 1][1])
-    #         chains[bigrams[i]] = values_lst
-    #     else:
-    #         chains[bigrams[i]] = [bigrams[i + 1][1]]
-
-    for i in range(len(word_lst) - 2):
+    for i in range(len(word_lst) - 1):
         curr_tuple = (word_lst[i], word_lst[i+1])
         
-        if curr_tuple in chains:
-            values_lst = chains[curr_tuple]
-            values_lst.append(word_lst[i + 2])
-            chains[curr_tuple] = values_lst
-        else:
-            chains[curr_tuple] = [word_lst[i + 2]]
+        # if curr_tuple in chains:
+        #     if i == len(word_lst) - 2:
+        #         values_lst = chains[curr_tuple]
+        #         values_lst.append(None)
+        #         chains[curr_tuple] = values_lst
+
+        #         chains[(word_lst[-1], None)] = [None]
+        #     else:
+        #         values_lst = chains[curr_tuple]
+        #         values_lst.append(word_lst[i + 2])
+        #         chains[curr_tuple] = values_lst
+        # else:
+        #     if i == len(word_lst) - 2:
+        #         chains[curr_tuple] = [None]
+        #         chains[(word_lst[-1], None)] = [None]
+        #     else:
+        #         chains[curr_tuple] = [word_lst[i + 2]]
+        try:
+            if curr_tuple in chains:
+                values_lst = chains[curr_tuple]
+                values_lst.append(word_lst[i + 2])
+                chains[curr_tuple] = values_lst
+            else:
+                chains[curr_tuple] = [word_lst[i + 2]]
+        except IndexError:
+            if curr_tuple in chains:
+                values_lst = chains[curr_tuple]
+                values_lst.append(None)
+                chains[curr_tuple] = values_lst
+                    
+                chains[(word_lst[-1], None)] = [None]
+            else:
+                chains[curr_tuple] = [None]
+                chains[(word_lst[-1], None)] = [None]
       
     return chains
 
@@ -86,7 +102,6 @@ def make_text(chains):
             chosen_value = choice(chains[chosen_key])
             words.append(chosen_key[0])
         except KeyError:
-            words.append("I am.")
             break
 
     return " ".join(words)
