@@ -17,7 +17,7 @@ def open_and_read_file(file_path):
     return text_str
 
 
-def make_chains(text_string):
+def make_chains(text_string, n):
     """Take input text as string; return dictionary of Markov chains.
 
     A chain will be a key that consists of a tuple of (word1, word2)
@@ -46,20 +46,18 @@ def make_chains(text_string):
     word_lst = text_string.split()
 
     for i in range(len(word_lst) - 1):
-        curr_tuple = (word_lst[i], word_lst[i+1])
-    
+        curr_tuple = tuple(word_lst[i:i+n])
+        # print curr_tuple
         try:
             if curr_tuple in chains:
-                chains[curr_tuple].append(word_lst[i + 2])
+                chains[curr_tuple].append(word_lst[i + n])
             else:
-                chains[curr_tuple] = [word_lst[i + 2]]
+                chains[curr_tuple] = [word_lst[i + n]]
         except IndexError:
             if curr_tuple in chains:
-                chains[curr_tuple].append(None)
-                   
+                chains[curr_tuple].append(None)                 
             else:
                 chains[curr_tuple] = [None]
-      
     return chains
 
 
@@ -82,24 +80,26 @@ def make_text(chains):
     words.append(chosen_key[0])
 
     while True:
+        chosen_key = chosen_key[1:n] + (chosen_value,)
         try:
-            chosen_key = (chosen_key[1], chosen_value)
             chosen_value = choice(chains[chosen_key])
-            words.append(chosen_key[0])
         except KeyError:
-            words.append(chosen_key[0])
+            words.extend(list(chosen_key[0:n-1]))
             break
+
+        words.append(chosen_key[0])
 
     return " ".join(words)
 
 
 input_path = argv[1]
+n = int(argv[2])
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
-chains = make_chains(input_text)
+chains = make_chains(input_text, n)
 
 # Produce random text
 random_text = make_text(chains)
