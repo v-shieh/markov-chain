@@ -68,7 +68,15 @@ def make_text(chains):
 
     words = []
 
-    chosen_key = choice(chains.keys())
+    while True:
+        chosen_key = choice(chains.keys())
+
+        if chosen_key[0][0].isupper():
+            break
+        else:
+            continue
+
+
     chosen_value = choice(chains[chosen_key])
 
     words.append(chosen_key[0])
