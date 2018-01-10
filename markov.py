@@ -45,7 +45,7 @@ def make_chains(text_string):
     word_lst = text_string.split()
  
 
-for i in range(len(word_lst) - 1):
+    for i in range(len(word_lst) - 1):
         curr_tuple = (word_lst[i], word_lst[i+1])
     
         try:
@@ -57,11 +57,11 @@ for i in range(len(word_lst) - 1):
             if curr_tuple in chains:
                 chains[curr_tuple].append(None)
                    
-                chains[(word_lst[-1], None)] = [None]
+                # chains[(word_lst[-1], None)] = [None]
             else:
                 chains[curr_tuple] = [None]
 
-                chains[(word_lst[-1], None)] = [None]
+                # chains[(word_lst[-1], None)] = [None]
       
     return chains
 
@@ -77,12 +77,14 @@ def make_text(chains):
     words.append(chosen_key[0])
 
     while True:
-        try:
+        if chains[chosen_key] == [None]:
+            words.append(chosen_key[1])
+            break
+        else:
             chosen_key = (chosen_key[1], chosen_value)
             chosen_value = choice(chains[chosen_key])
             words.append(chosen_key[0])
-        except KeyError:
-            break
+            
 
     return " ".join(words)
 
